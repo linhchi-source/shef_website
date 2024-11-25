@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Gallery</title>
+    <style>
+      /* Initial style for images */
+      .gallery img {
+        width: 30%;
+
+        margin: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      /* Style for enlarged image */
+      .enlarged {
+        max-width: 100%;
+        max-height: 100%;
+        position: fixed;
+        
+
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      /* Hide all images except the clicked one */
+      .hidden {
+        display: none;
+      }
+
+      /* Style for the background (optional, to dim the background when image is enlarged) */
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 500;
+      }
+      .overlay:hover {
+        cursor: pointer;
+      }
+  
+    </style>
+  </head>
+  <body>
+    <div class="gallery">
+      <img src="food\15k rice.jpg" alt="Image 1" class="image" />
+      <img src="food\cohong vegan.jpg" alt="Image 2" class="image" />
+      <img src="food\fried mush.jpg" alt="Image 3" class="image" />
+      <!-- Add more images as needed -->
+    </div>
+
+    <!-- Optional: Overlay to dim the background -->
+    <div id="overlay" class="overlay" style="display: none"></div>
+
+    <script>
+      // Get all images in the gallery
+      const images = document.querySelectorAll(".gallery .image");
+      const overlay = document.getElementById("overlay");
+
+      // Function to enlarge image
+      function enlargeImage(event) {
+
+        const clickedImage = event.target;
+        // Hide all other images
+        images.forEach((image) => {
+          if (image !== clickedImage) {
+            image.classList.add("hidden");
+          }
+        });
+
+        // Add enlarged class to clicked image to center and enlarge it
+        clickedImage.classList.add("enlarged");
+
+        // Show overlay
+        overlay.style.display = "block";
+
+        // Add click event to overlay to close the enlarged image
+        overlay.addEventListener("click", closeEnlargedImage);
+      }
+
+      // Function to close enlarged image and restore gallery
+      function closeEnlargedImage() {
+        const enlargedImage = document.querySelector(".enlarged");
+
+        // Hide overlay
+        overlay.style.display = "none";
+
+        // Remove enlarged class from image
+        if (enlargedImage) {
+          enlargedImage.classList.remove("enlarged");
+        }
+
+        // Show all images again
+        images.forEach((image) => {
+          image.classList.remove("hidden");
+        });
+
+        // Remove event listener from overlay
+        overlay.removeEventListener("click", closeEnlargedImage);
+      }
+
+      // Add click event to each image
+      images.forEach((image) => {
+        image.addEventListener("click", enlargeImage);
+      });
+    </script>
+  </body>
+</html>
